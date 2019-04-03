@@ -1,6 +1,6 @@
 # Docker Wordpress Starter
 
-This repo can be used to start a new Wordpress installation using Docker. 
+This repo can be used to start a new Wordpress installation using Docker and Docker Compose. 
 
 These configurations will let you handle the templates, plugins and uploads folder in order to allow any kind of backups or modifications that you intend to do from your host.
 
