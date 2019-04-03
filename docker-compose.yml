@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  web:
+    image: wordpress:latest
+    container_name: proj_web_1
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+    ports:
+      - 8080:80
+    volumes:
+      - ./wordpress/data/themes:/var/www/html/wp-content/themes/
+      - ./wordpress/data/plugins:/var/www/html/wp-content/plugins/
+      - ./wordpress/data/uploads:/var/www/html/wp-content/uploads/
+    restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      - wordpress
+      - outside
+
+  db:
+    build: ./db
+    container_name: proj_db_1
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+        - "33016:3306"
+    volumes:
+      - ./db/data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - wordpress
+
+networks:
+  outside:
+    external: true
+  wordpress:
+    internal: true
+    driver: bridge 
